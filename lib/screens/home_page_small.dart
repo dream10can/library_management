@@ -22,6 +22,10 @@ class _HomePageSmallState extends State<HomePageSmall> {
   final _formKey = GlobalKey<FormState>();
 
   void _loginAction() {
+    final readAnimationbutton = context.read(buttonLoginAnimation);
+
+    readAnimationbutton.animationPysicalWidget();
+
     if (_formKey.currentState.validate()) {
       final user = context.read(authentication).user;
 
@@ -62,8 +66,12 @@ class _HomePageSmallState extends State<HomePageSmall> {
     }
   }
 
-  void _registerAction() {
+  void _registerAction() async {
+    final readAnimationbutton = context.read(buttonLoginAnimation);
+
+    readAnimationbutton.animationPysicalWidget();
     if (_formKey.currentState.validate()) {
+      await Future.delayed(Duration(microseconds: 1000));
       context.read(authentication).register(_username.text, _password.text);
 
       _username.clear();
@@ -143,7 +151,7 @@ class _HomePageSmallState extends State<HomePageSmall> {
           'Login',
           style: TextStyle(fontSize: 20.0),
         ),
-        onPressed: () {
+        onPressed: () async {
           _editBottomSheetLogin(context, 'Login', _loginAction);
         },
       ),
@@ -253,28 +261,39 @@ class _HomePageSmallState extends State<HomePageSmall> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 60.0),
-            width: 30.0,
-            height: 50.0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
+          Consumer(
+            builder: (context, watch, widget) {
+              final animatedbutton = watch(buttonLoginAnimation);
+
+              return AnimatedContainer(
+                duration: Duration(seconds: 1),
+                margin: EdgeInsets.only(top: 60.0),
+                width: 30.0,
+                height: 50.0,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    elevation: 4.0,
+                    primary: animatedbutton.isFlat
+                        ? Colors.white
+                        : Colors.blueAccent,
+                    onPrimary: animatedbutton.isFlat
+                        ? Colors.blueAccent
+                        : Colors.white,
+                    onSurface: Colors.grey,
                   ),
+                  child: Text(
+                    buttonName,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  onPressed: action,
                 ),
-                elevation: 4.0,
-                primary: Colors.white,
-                onPrimary: Colors.blueAccent,
-                onSurface: Colors.grey,
-              ),
-              child: Text(
-                buttonName,
-                style: TextStyle(fontSize: 20.0),
-              ),
-              onPressed: action,
-            ),
+              );
+            },
           ),
         ],
       ),
