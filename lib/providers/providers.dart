@@ -24,3 +24,11 @@ final studListData = ChangeNotifierProvider<DpStudent>(
     return DpStudent();
   },
 );
+
+final studDeleteData = ChangeNotifierProvider<DpStudent>((ref) {
+  return DpStudent();
+});
+
+final studUpdate = Provider<DpStudent>((ref) {
+  return DpStudent();
+});

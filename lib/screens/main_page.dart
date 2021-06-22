@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:library_management/responsive_utill.dart';
 import 'package:library_management/widgets/homePageLarge.dart';
 import 'package:library_management/widgets/home_page_medium.dart';
-import 'package:library_management/screens/home_page_small.dart';
+import 'check_user_seen.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
 
     switch (getScreenSize(MediaQuery.of(context).size.width)) {
       case ScreenSize.small:
-        widget = HomePageSmall();
+        widget = CheckUserIntro();
         break;
       case ScreenSize.medium:
         widget = HomePageMedium();

@@ -54,7 +54,7 @@ class DpStudent extends ChangeNotifier {
     return db.delete('library', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> updateCourse(Student course) async {
+  Future<int> updateLibrary(Student course) async {
     Database db = await createDatabase();
 
     return await db.update(

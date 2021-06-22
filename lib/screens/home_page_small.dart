@@ -5,6 +5,7 @@ import 'package:library_management/screens/landing_page.dart';
 import 'package:library_management/widgets/custom_Clipper_image.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePageSmall extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _HomePageSmallState extends State<HomePageSmall> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _loginAction() {
+  Future<void> _loginAction() async {
     final readAnimationbutton = context.read(buttonLoginAnimation);
 
     readAnimationbutton.animationPysicalWidget();
@@ -33,6 +34,9 @@ class _HomePageSmallState extends State<HomePageSmall> {
       final password = context.read(authentication).password;
 
       if (user == _username.text && password == _password.text) {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+
+        pref.setBool('seen', true);
         final sucessfulLogin = SnackBar(
           content: Text(
             'successfuly Login',

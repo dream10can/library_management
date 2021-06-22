@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:library_management/database/sql_lite_library.dart';
 import 'package:library_management/models/student.dart';
 import 'package:library_management/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:library_management/widgets/textFormFieldDesign.dart';
 
-final recordsList = FutureProvider.autoDispose<List>((ref) {
-  return DpStudent().allCourses();
-});
+class UpdateStudentRecord extends StatefulWidget {
+  final Student student;
 
-class StudentScreenRecord extends StatefulWidget {
+  UpdateStudentRecord(this.student);
+
   @override
-  _StudentScreenRecordState createState() => _StudentScreenRecordState();
+  _UpdateStudentRecordState createState() => _UpdateStudentRecordState();
 }
 
-class _StudentScreenRecordState extends State<StudentScreenRecord> {
+class _UpdateStudentRecordState extends State<UpdateStudentRecord> {
+  Student student;
+
   final _studentName = TextEditingController();
 
   final _studentAge = TextEditingController();
@@ -45,20 +46,18 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
   ];
   String dropdownValue = 'Technology';
 
-  DateTime _selectedDataBorrow = DateTime.now();
-
-  DateTime _selectedDataEnd = DateTime.now();
-
   Future<void> _pickedDateBorrow(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: _selectedDataBorrow,
+        initialDate: DateTime.parse(widget.student.dateBorrow.split(' ')[0]),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
 
-    if (picked != null && picked != _selectedDataBorrow) {
+    if (picked != null &&
+        picked.toString().split(' ')[0] !=
+            widget.student.dateBorrow.split(' ')[0]) {
       setState(() {
-        _selectedDataBorrow = picked;
+        widget.student.dateBorrow = picked.toString();
       });
     }
   }
@@ -66,15 +65,32 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
   Future<void> _pickedDateEnd(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: _selectedDataBorrow,
+        initialDate: DateTime.parse(widget.student.dateEnd.split(' ')[0]),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
 
-    if (picked != null && picked != _selectedDataEnd) {
+    if (picked != null &&
+        picked.toString().split(' ')[0] !=
+            widget.student.dateEnd.split(' ')[0]) {
       setState(() {
-        _selectedDataEnd = picked;
+        widget.student.dateEnd = picked.toString();
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _studentName.text = widget.student.name;
+    _idNum.text = widget.student.idNum;
+    _studentAge.text = widget.student.age;
+    _phoneNum.text = widget.student.phoneNum;
+    _bookName.text = widget.student.bookName;
+    _authorName.text = widget.student.author;
+    dropdownValue = widget.student.category;
+    _isbn.text = widget.student.isbn;
+    _description.text = widget.student.description;
   }
 
   @override
@@ -105,7 +121,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       icon: Icon(Icons.info),
-                      hintText: 'Student name',
                     ),
                   ),
                   SizedBox(
@@ -115,7 +130,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _studentAge,
                     message: 'Enter Age Of Student',
                     inputType: TextInputType.number,
-                    hintText: 'Student age',
                     iconDesign: Icons.add_box,
                   ),
                   SizedBox(height: 20.0),
@@ -123,7 +137,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _idNum,
                     message: 'Enter Id Number Of Student',
                     inputType: TextInputType.number,
-                    hintText: 'ID Num',
                     iconDesign: Icons.perm_identity,
                   ),
                   SizedBox(
@@ -133,7 +146,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _phoneNum,
                     message: 'Enter Phone Num Of Student',
                     inputType: TextInputType.number,
-                    hintText: 'Phone Num',
                     iconDesign: Icons.phone_android,
                   ),
                   SizedBox(
@@ -143,7 +155,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _bookName,
                     message: 'Enter Book Name',
                     inputType: TextInputType.text,
-                    hintText: 'Book Name',
                     iconDesign: Icons.library_books,
                   ),
                   SizedBox(
@@ -153,7 +164,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _authorName,
                     message: 'Enter Author Name',
                     inputType: TextInputType.text,
-                    hintText: 'Autor Name',
                     iconDesign: Icons.person,
                   ),
                   SizedBox(
@@ -199,13 +209,14 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     infoController: _isbn,
                     message: 'Enter ISBN Code',
                     inputType: TextInputType.number,
-                    hintText: 'ISBN Name',
                     iconDesign: Icons.person,
                   ),
                   SizedBox(
                     height: 30.0,
                   ),
-                  Text("${_selectedDataBorrow.toLocal()}".split(' ')[0]),
+                  // Text("${_selectedDataBorrow.toLocal()}".split(' ')[0]),
+
+                  Text(widget.student.dateBorrow.split(' ')[0]),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 4.0,
@@ -221,7 +232,8 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  Text("${_selectedDataEnd.toLocal()}".split(' ')[0]),
+                  // Text("${_selectedDataEnd.toLocal()}".split(' ')[0]),
+                  Text(widget.student.dateEnd.split(' ')[0]),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 4.0,
@@ -250,7 +262,6 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                     maxLines: null,
                     decoration: InputDecoration(
                       icon: Icon(Icons.description),
-                      hintText: 'Description',
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue),
                         borderRadius: BorderRadius.circular(15.0),
@@ -271,7 +282,7 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                       onSurface: Colors.grey,
                     ),
                     child: Text(
-                      'Add Records',
+                      'Update Records',
                       style: TextStyle(fontSize: 20.0),
                     ),
                     onPressed: () {
@@ -293,6 +304,7 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                         final description = _description.text;
 
                         Student stud = Student({
+                          'id': widget.student.id,
                           'name': name,
                           'age': age,
                           'idNum': idNum,
@@ -301,8 +313,8 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
                           'author': authorName,
                           'category': dropdownValue,
                           'isbn': isbn,
-                          'dateBorrow': _selectedDataBorrow.toString(),
-                          'dateEnd': _selectedDataEnd.toString(),
+                          'dateBorrow': widget.student.dateBorrow,
+                          'dateEnd': widget.student.dateEnd,
                           'description': description,
                         });
 
@@ -317,12 +329,13 @@ class _StudentScreenRecordState extends State<StudentScreenRecord> {
 
                         // print(stud.toString());
 
-                        final add = context.read(addRecords);
-                        add.createLibrary(stud);
+                        final updateStud = context.read(studUpdate);
+
+                        updateStud.updateLibrary(stud);
 
                         final stuSuccessfulyAdded = SnackBar(
                           backgroundColor: Colors.green,
-                          content: Text('Student Added'),
+                          content: Text('Student updated'),
                         );
 
                         ScaffoldMessenger.of(context)
