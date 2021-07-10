@@ -51,6 +51,52 @@ Library Management System using Flutter with awesome UI and CRUD Operation it ca
 
 ---
 
+## Splach Screen
+
+
+<img src='lib/github_pic/image1.jpeg' width="250" >
+
+---
+
+## Ui Login Screen
+
+<img src='lib/github_pic/image2.jpeg' width="250" >
+
+
+---
+
+## Pop Up Screen
+
+<img src='lib/github_pic/image3.jpeg' width="250" >
+
+
+---
+
+## Landing page
+
+<img src='lib/github_pic/image4.jpeg' width="250" >
+
+
+---
+
+## Add Student Records
+
+<img src='lib/github_pic/image5.jpeg' width="250" >
+
+---
+## Student Details
+
+<img src='lib/github_pic/image6.jpeg' width="250" >
+
+
+---
+## Update Student Details
+
+<img src='lib/github_pic/image7.jpeg' width="250" >
+
+
+
+
 
 
 ## License
